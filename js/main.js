@@ -1,14 +1,8 @@
-const getRandomInteger = (min = 0, max = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
+const MAX_COMMIT_LENGTH = 141;
 
-getRandomInteger  (1,100);
+const GET_RANDOM_INTEGER = (min = 0, max = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-let commit= 'hello,world';
-const lengthCommit=commit.length;
-const isSomethingLengthCommit = function (lengthCommit) {
-  if(lengthCommit > 0 && lengthCommit< 140) {
-    return true;
-  }
-  else {return false;}
-};
+const IS_VALID_LENGTH_COMMIT = (string = '') => string.length <= MAX_COMMIT_LENGTH;
 
-isSomethingLengthCommit (lengthCommit);
+GET_RANDOM_INTEGER(1,100);
+IS_VALID_LENGTH_COMMIT('Hello, world');
