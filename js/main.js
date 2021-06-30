@@ -38,7 +38,7 @@ const MIN_ID = 1;
 
 const MAX_ID = 25;
 
-const MAX_AVATAR = 6;
+const MAX_AVATAR = 1;
 
 const MIN_AVATAR = 7;
 
@@ -48,13 +48,7 @@ const MAX_LIKE = 200;
 
 const MAX_POSTS = 25;
 
-const PHOTOS = 'photos/';
-
-const JPG_FORMAT = '.jpg';
-
-const AVATARS = 'img/avatar-';
-
-const SVG_FORMAT = '.svg';
+const MAX_COMMENTS =3;
 
 const getRandomInteger = (min = 0, max = 0) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -63,31 +57,32 @@ const isValidLengthCommit = (string = '') => string.length <= MAX_COMMIT_LENGTH;
 getRandomInteger(1,100);
 isValidLengthCommit('Hello, world');
 
-const postMessage = [];
-const addComments = () => {
+
+const generateComments = () => {
   const comments = [];
-
-  for (let i = 0; i <= MAX_COMMENTS; i++) {
-    comments.push({
+  for (let index = 0; index < MAX_COMMENTS; index++) {
+    comments[index] = {
       id: getRandomInteger(MIN_ID,MAX_ID),
-      avatar:[AVATARS,getRandomInteger(MIN_AVATAR,MAX_AVATAR),SVG_FORMAT],
-      message: MESSAGE[getRandomInteger(0,MESSAGE.length-1)],
+      avatar:`img/avatar-${getRandomInteger(MIN_AVATAR,MAX_AVATAR)}.svg`,
+      message: MESSAGES[getRandomInteger(0,MESSAGES.length-1)],
       name: NAMES[getRandomInteger(0,NAMES.length-1)],
-    })
-  };
-};
-
-const createPost = (index) => {
-  id: getRandomInteger(MIN_ID,MAX_ID),
-  url: [PHOTOS,index,JPG_FORMAT],
-  description: 'Как я хорошо отдохнул в Египте',
-  likes: getRandomInteger(MIN_LIKE,MAX_LIKE),
-  comments: addComments,
-};
-
-const createPost = () => {
-  for (let i = 0; i <= MAX_POSTS; i++){
-    postMessage.push(createPost(i));
+    };
   }
-}
+  return comments;
+};
 
+const createPosts = () => {
+  const postMessage = [];
+  for (let index = 0; index < MAX_POSTS; index++){
+    postMessage[index] = {
+      id: index + 1,
+      url: `photos/${index + 1}.jpg`,
+      description: 'Как я хорошо отдохнул в Египте',
+      likes: getRandomInteger(MIN_LIKE,MAX_LIKE),
+      comments: generateComments(),
+    };
+  }
+  return postMessage;
+};
+
+createPosts();
