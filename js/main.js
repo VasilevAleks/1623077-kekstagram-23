@@ -66,10 +66,10 @@ const isValidLengthCommit = (string = '') => string.length <= MAX_COMMIT_LENGTH;
 getRandomInteger(1,100);
 isValidLengthCommit('Hello, world');
 
-const generateComments = () => {
+const generateComments = (count) => {
   const comments = [];
-  for (let index = 0; index < getRandomInteger(0,MAX_COMMENTS); index++) {
-    comments.push = ({
+  for (let index = 0; index <count; index++) {
+    comments.push({
       id: getRandomInteger(MIN_ID,MAX_ID),
       avatar:`${AVATARS}${getRandomInteger(MIN_AVATAR,MAX_AVATAR)}${SVG_FORMAT}`,
       message: MESSAGES[getRandomInteger(0,MESSAGES.length-1)],
@@ -82,24 +82,16 @@ const generateComments = () => {
 const createPosts = (count) => {
   const generateMessage = [];
   for (let index = 0; index < count; index++){
-    generateMessage.push = ({
+    generateMessage.push({
       id:index + 1,
       url: `${PHOTOS}${index + 1}${JPG_FORMAT}`,
       description: 'Как я хорошо отдохнул в Египте',
       likes: getRandomInteger(MIN_LIKE,MAX_LIKE),
-      comments: new Array(getRandomInteger(1,MAX_COMMENTS)).fill(null).map(() => generateComments()),
+      comments: generateComments(getRandomInteger(0,MAX_COMMENTS)),
     });
   }
   return generateMessage;
 };
 
-
-const getPostsArray =(count)=> {
-  const postsArray = [];
-  for (let index = 0; index <= count; index++) {
-    postsArray.push(createPosts(index));
-  }
-  return postsArray;
-};
-const mock = getPostsArray(MAX_POSTS);
+const mock = createPosts(MAX_POSTS);
 mock.length;
