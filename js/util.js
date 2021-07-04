@@ -4,7 +4,4 @@ const getRandomInteger = (min = 0, max = 0) => Math.floor(Math.random() * (max -
 
 const isValidLengthCommit = (string = '') => string.length <= MAX_COMMIT_LENGTH;
 
-getRandomInteger(1,100);
-isValidLengthCommit('Hello, world');
-
 export {getRandomInteger, isValidLengthCommit};
