@@ -46,8 +46,6 @@ const MIN_LIKE = 15;
 
 const MAX_LIKE = 200;
 
-export const MAX_POSTS = 25;
-
 const MAX_COMMENTS = 20;
 
 const PHOTOS = 'photos/';
