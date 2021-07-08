@@ -1,5 +1,7 @@
+import {isEscEvent} from './util.js';
+
 const fullscreenPicture = document.querySelector('.big-picture');
-const closePictureButton = fullscreenPicture.querySelector('#picture-cancel');
+const closePictureButtonHandler = fullscreenPicture.querySelector('#picture-cancel');
 const bigPicture = fullscreenPicture.querySelector('.big-picture__img img');
 const countLikes = fullscreenPicture.querySelector('.likes-count');
 const countComments = fullscreenPicture.querySelector('.comments-count');
@@ -21,21 +23,15 @@ const closePicture =() => {
   document.body.classList.remove('modal-open');
 };
 
-const isEscEvent =(evt) => {
-  if (evt.key === 'Escape' || evt.key === 'Esc') {
+const onKeydownEsc = (evt) => {
+  if (isEscEvent(evt)) {
     closePicture();
   }
 };
 
-export const showBigPicture = (photo) => {
-  openPicture ();
-  bigPicture.src = photo.url;
-  bigPicture.alt = photo.description;
-  countLikes.textContent = photo.likes;
-  countComments.textContent = photo.comments.length;
-  socialCaption.textContent = photo.description;
+const renderComments = (comments) => {
   const fragment = document.createDocumentFragment();
-  photo.comments.forEach((data) => {
+  comments.forEach((data) => {
     const comment = socialComment.cloneNode(true);
     const avatar = comment.querySelector('.social__picture');
     const text = comment.querySelector('.social__text');
@@ -44,7 +40,19 @@ export const showBigPicture = (photo) => {
     text.textContent = data.message;
     fragment.appendChild(comment);
   });
-  socialComments.appendChild(fragment);
-  document.addEventListener('keydown', isEscEvent);
-  closePictureButton.addEventListener('click',closePicture);
+  return fragment;
 };
+
+
+const renderBigPicture = (photo) => {
+  bigPicture.src = photo.url;
+  bigPicture.alt = photo.description;
+  countLikes.textContent = photo.likes;
+  countComments.textContent = photo.comments.length;
+  socialCaption.textContent = photo.description;
+  socialComments.appendChild(renderComments(photo.comments));
+  document.addEventListener('keydown', onKeydownEsc);
+  closePictureButtonHandler.addEventListener('click',closePicture);
+};
+
+export {openPicture, renderBigPicture};
