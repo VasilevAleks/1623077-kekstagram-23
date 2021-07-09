@@ -1,7 +1,7 @@
 import {isEscEvent} from './util.js';
 
 const fullscreenPicture = document.querySelector('.big-picture');
-const closePictureButtonHandler = fullscreenPicture.querySelector('#picture-cancel');
+const onClosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
 const bigPicture = fullscreenPicture.querySelector('.big-picture__img img');
 const countLikes = fullscreenPicture.querySelector('.likes-count');
 const countComments = fullscreenPicture.querySelector('.comments-count');
@@ -18,14 +18,14 @@ const openPicture =() => {
   moreComments.classList.add('hidden');
 };
 
-const closePicture =() => {
+const closePictureElement =() => {
   fullscreenPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 };
 
 const onKeydownEsc = (evt) => {
   if (isEscEvent(evt)) {
-    closePicture();
+    closePictureElement();
   }
 };
 
@@ -52,7 +52,7 @@ const renderBigPicture = (photo) => {
   socialCaption.textContent = photo.description;
   socialComments.appendChild(renderComments(photo.comments));
   document.addEventListener('keydown', onKeydownEsc);
-  closePictureButtonHandler.addEventListener('click',closePicture);
+  onClosePictureButton.addEventListener('click',closePictureElement);
 };
 
 export {openPicture, renderBigPicture};
