@@ -6,4 +6,4 @@ const isValidLengthCommit = (string = '') => string.length <= MAX_COMMIT_LENGTH;
 
 const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-export {getRandomInteger, isValidLengthCommit, isEscEvent};
+export {getRandomInteger, isValidLengthCommit, isEscEvent, MAX_COMMIT_LENGTH};
