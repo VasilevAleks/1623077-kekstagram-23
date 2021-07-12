@@ -4,4 +4,6 @@ const getRandomInteger = (min = 0, max = 0) => Math.floor(Math.random() * (max -
 
 const isValidLengthCommit = (string = '') => string.length <= MAX_COMMIT_LENGTH;
 
-export {getRandomInteger, isValidLengthCommit};
+const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
+export {getRandomInteger, isValidLengthCommit, isEscEvent};
