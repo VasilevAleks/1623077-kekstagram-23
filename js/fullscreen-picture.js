@@ -1,7 +1,7 @@
 import {isEscEvent} from './util.js';
 
 const fullscreenPicture = document.querySelector('.big-picture');
-const onClosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
+const сlosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
 const bigPicture = fullscreenPicture.querySelector('.big-picture__img img');
 const countLikes = fullscreenPicture.querySelector('.likes-count');
 const countComments = fullscreenPicture.querySelector('.comments-count');
@@ -11,21 +11,21 @@ const moreComments = fullscreenPicture.querySelector('.comments-loader');
 const socialComments= fullscreenPicture.querySelector('.social__comments');
 const socialComment = socialComments.querySelector('.social__comment');
 
-const openPicture =() => {
+const openPicture = () => {
   fullscreenPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
   countSocialComment.classList.add('hidden');
   moreComments.classList.add('hidden');
 };
 
-const closePictureElement =() => {
+const onClosePicture = () => {
   fullscreenPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 };
 
 const onKeydownEsc = (evt) => {
   if (isEscEvent(evt)) {
-    closePictureElement();
+    onClosePicture();
   }
 };
 
@@ -50,9 +50,11 @@ const renderBigPicture = (photo) => {
   countLikes.textContent = photo.likes;
   countComments.textContent = photo.comments.length;
   socialCaption.textContent = photo.description;
+  socialComments.innerHTML = '';
   socialComments.appendChild(renderComments(photo.comments));
+  photo.comments.slice(0, 5);
   document.addEventListener('keydown', onKeydownEsc);
-  onClosePictureButton.addEventListener('click',closePictureElement);
+  сlosePictureButton.addEventListener('click',onClosePicture);
 };
 
 export {openPicture, renderBigPicture};
