@@ -5,7 +5,7 @@ const uploadForm = document.querySelector('.img-upload__overlay');
 const closeUploadForm = uploadForm.querySelector('.img-upload__cancel');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
-const HASHTAG_PATTERN =  /^[A-Za-zА-Яа-я0-9]$/; //const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁаё-я0-9]+/g - почему то на это ругается
+const HASHTAG_PATTERN =  /^#[A-Za-zА-Яа-я0-9]$/; //const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁаё-я0-9]+/g - почему то на это ругается
 const MAX_HASHTAG_LENGHT = 20;
 const MAX_HASHTAG_QUANTITY = 5;
 
@@ -25,17 +25,6 @@ const onKeydownEsc = (evt) => {
   }
 };
 
-const setError = (input) => {
-  input.style.borderColor = 'red';
-  input.style.borderWidth = '5px';
-};
-
-const removeError = (input) => {
-  input.style.borderColor = '';
-  input.style.borderWidth = '';
-};
-
-
 const onCommentInput = () => {
   const valueLength = commentInput.value.length;
   if (valueLength > MAX_COMMIT_LENGTH) {
@@ -47,7 +36,7 @@ const onCommentInput = () => {
 };
 
 const onHashtagInput = () => {
-  const arrayOfHashtags = hashtagsInput.value.replace(/ +/g, ' ').trim().split(' ');
+  const arrayOfHashtags = hashtagsInput.value.replace(/ +/g, ' ').toLowerCase().trim().split(' ');
   arrayOfHashtags.forEach((hashtag) => {
     if (arrayOfHashtags.length === 0 || arrayOfHashtags[0] === '') {
       hashtagsInput.setCustomValidity('');
@@ -55,14 +44,16 @@ const onHashtagInput = () => {
       hashtagsInput.setCustomValidity(`Хэштегов не может быть больше ${MAX_HASHTAG_QUANTITY}`);
     } else {
       if (hashtag.length > MAX_HASHTAG_LENGHT) {
-        hashtagsInput.setCustomValidity(`Хэштег не должен быть длиннее ${MAX_HASHTAG_LENGHT} символов`);
-        setError(hashtagsInput);}
+        hashtagsInput.setCustomValidity(`Хэштег не должен быть длиннее ${MAX_HASHTAG_LENGHT} символов`);}
       else if (hashtag.charAt(0) !== '#') {
-        hashtagsInput.setCustomValidity('Хэштег должен начинаться с решетки');
-        setError(hashtagsInput);}
+        hashtagsInput.setCustomValidity('Хэштег должен начинаться с решетки');}
+      else if ((hashtag.length === 1) && (hashtag === '#')){
+        hashtagsInput.setCustomValidity('Хэштег не может состоять только из этого символа');
+      }
       else if (!HASHTAG_PATTERN.test(hashtag.slice(1))) {// не работает данный метод
-        hashtagsInput.setCustomValidity('В хэшеге не должно быть символов');
-        setError(hashtagsInput);}
+        hashtagsInput.setCustomValidity('В хэштеге не должно быть символов');
+      }
+
       else {
         hashtagsInput.setCustomValidity('');
       }
