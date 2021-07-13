@@ -1,10 +1,11 @@
 import {isEscEvent, MAX_COMMIT_LENGTH} from './util.js';
 
+const uploadFile = document.querySelector('#upload-file');
 const uploadForm = document.querySelector('.img-upload__overlay');
 const closeUploadForm = uploadForm.querySelector('.img-upload__cancel');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
-const MIN_HASHTAG_LENGHT = 2;
+const HASHTAG_PATTERN =  /^[A-Za-zА-Яа-я0-9]$/; //const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁаё-я0-9]+/g - почему то на это ругается
 const MAX_HASHTAG_LENGHT = 20;
 const MAX_HASHTAG_QUANTITY = 5;
 
@@ -19,7 +20,7 @@ const closePictureElement = () => {
 };
 
 const onKeydownEsc = (evt) => {
-  if (isEscEvent(evt)) {
+  if (document.activeElement !== commentInput && isEscEvent(evt) || document.activeElement !== hashtagsInput && isEscEvent(evt)) { // Когда что-то одно работает, через else if не работает
     closePictureElement();
   }
 };
@@ -44,41 +45,40 @@ const onCommentInput = () => {
   }
   commentInput.reportValidity();
 };
-const onInputEscKeydown = (evt) => {
-  if (isEscEvent(evt)) {
-    evt.stopPropagation();
-  }
-};
+
 const onHashtagInput = () => {
-  const arrayOfHashtags = hashtagsInput.value.split(' ');
-  const re = /^#[A-Za-zА-Яа-я0-9]{1,19}$/;
+  const arrayOfHashtags = hashtagsInput.value.replace(/ +/g, ' ').trim().split(' ');
   arrayOfHashtags.forEach((hashtag) => {
-    if (hashtag.length < MIN_HASHTAG_LENGHT) {
-      hashtagsInput.setCustomValidity(`Хэштег должен быть длиннее ${MIN_HASHTAG_LENGHT} символов`);
-      setError(hashtagsInput);
-    } else if (hashtag.length > MAX_HASHTAG_LENGHT) {
-      hashtagsInput.setCustomValidity(`Хэштег не должен быть длиннее ${ MAX_HASHTAG_LENGHT} символов`);
-      setError(hashtagsInput);
-    } else if (arrayOfHashtags.length > MAX_HASHTAG_QUANTITY) {
-      hashtagsInput.setCustomValidity(`Хэштегов не может быть больше ${MAX_HASHTAG_QUANTITY} `);
-      setError(hashtagsInput);
-    } else if (re.test(hashtag) === false) {
-      hashtagsInput.setCustomValidity('Хэштег должен начинаться с решетки и может состоять из букв и чисел');
-      setError(hashtagsInput);
-    }  else {
+    if (arrayOfHashtags.length === 0 || arrayOfHashtags[0] === '') {
       hashtagsInput.setCustomValidity('');
-      removeError(hashtagsInput);
+    } else if (arrayOfHashtags.length > MAX_HASHTAG_QUANTITY) {
+      hashtagsInput.setCustomValidity(`Хэштегов не может быть больше ${MAX_HASHTAG_QUANTITY}`);
+    } else {
+      if (hashtag.length > MAX_HASHTAG_LENGHT) {
+        hashtagsInput.setCustomValidity(`Хэштег не должен быть длиннее ${MAX_HASHTAG_LENGHT} символов`);
+        setError(hashtagsInput);}
+      else if (hashtag.charAt(0) !== '#') {
+        hashtagsInput.setCustomValidity('Хэштег должен начинаться с решетки');
+        setError(hashtagsInput);}
+      else if (!HASHTAG_PATTERN.test(hashtag.slice(1))) {// не работает данный метод
+        hashtagsInput.setCustomValidity('В хэшеге не должно быть символов');
+        setError(hashtagsInput);}
+      else {
+        hashtagsInput.setCustomValidity('');
+      }
     }
   });
   hashtagsInput.reportValidity();
 };
 
-export const uploadPhoto = () => {
+const uploadPhoto = () => {
   openPictureElement();
   commentInput.addEventListener('input', onCommentInput);
   hashtagsInput.addEventListener('input', onHashtagInput);
   document.addEventListener('keydown', onKeydownEsc);
-  commentInput.addEventListener('keydown', onInputEscKeydown);
-  hashtagsInput.addEventListener('keydown', onInputEscKeydown);
   closeUploadForm.addEventListener('click', closePictureElement);
+};
+
+export const onChangeFileInput = () => {
+  uploadFile.addEventListener('change',uploadPhoto);
 };
