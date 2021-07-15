@@ -1,7 +1,8 @@
 import {isEscEvent} from './util.js';
 
+const SHOWED_COMMENTS_COUNT = 5;
 const fullscreenPicture = document.querySelector('.big-picture');
-const сlosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
+const onClosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
 const bigPicture = fullscreenPicture.querySelector('.big-picture__img img');
 const countLikes = fullscreenPicture.querySelector('.likes-count');
 const countComments = fullscreenPicture.querySelector('.comments-count');
@@ -14,18 +15,17 @@ const socialComment = socialComments.querySelector('.social__comment');
 const openPicture = () => {
   fullscreenPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  countSocialComment.classList.add('hidden');
-  moreComments.classList.add('hidden');
+
 };
 
-const onClosePicture = () => {
+const closePictureElement = () => {
   fullscreenPicture.classList.add('hidden');
   document.body.classList.remove('modal-open');
 };
 
 const onKeydownEsc = (evt) => {
   if (isEscEvent(evt)) {
-    onClosePicture();
+    closePictureElement();
   }
 };
 
@@ -43,6 +43,33 @@ const renderComments = (comments) => {
   return fragment;
 };
 
+const chunkRenderComments = (comments) => {
+  const arrayComments = [];
+  let partOfArrayComments = [];
+  for ( index = 0, index<comments.length, index++ ) {
+    partOfArrayComments.push(comments[index]);
+    if (partOfArrayComments.length === SHOWED_COMMENTS_COUNT){
+      arrayComments.push(partOfArrayComments);
+      partOfArrayComments = [];
+    }
+    if (partOfArrayComments.length) {
+      arrayComments.push(partOfArrayComments);
+    }
+    return arrayCommentss
+  };
+
+};
+
+const displayRenderComments = (photo) => {
+  const chunkComments = chunkRenderComments(photo.comments);
+  moreComments.addEventListener('click', ( {
+    let index = moreComments.dataset.index;
+    chunkComments[index];
+    moreComments.dataset.index;
+  }));
+
+};
+
 
 const renderBigPicture = (photo) => {
   bigPicture.src = photo.url;
@@ -50,11 +77,11 @@ const renderBigPicture = (photo) => {
   countLikes.textContent = photo.likes;
   countComments.textContent = photo.comments.length;
   socialCaption.textContent = photo.description;
-  socialComments.innerHTML = '';
+  socialComments.innerHTML ='';
   socialComments.appendChild(renderComments(photo.comments));
-  photo.comments.slice(0, 5);
+  moreComments.addEventListener('click', displayRenderComments(photo.comments));
   document.addEventListener('keydown', onKeydownEsc);
-  сlosePictureButton.addEventListener('click',onClosePicture);
+  onClosePictureButton.addEventListener('click', closePictureElement);
 };
 
 export {openPicture, renderBigPicture};

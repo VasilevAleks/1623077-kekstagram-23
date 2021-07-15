@@ -5,7 +5,7 @@ const uploadForm = document.querySelector('.img-upload__overlay');
 const closeUploadForm = uploadForm.querySelector('.img-upload__cancel');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
-const HASHTAG_PATTERN =  /^#[A-Za-zА-Яа-я0-9]$/; //const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁаё-я0-9]+/g - почему то на это ругается
+const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁа-яё0-9]+/g; //const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁаё-я0-9]+/g - почему то на это ругается
 const MAX_HASHTAG_LENGHT = 20;
 const MAX_HASHTAG_QUANTITY = 5;
 
@@ -20,7 +20,10 @@ const closePictureElement = () => {
 };
 
 const onKeydownEsc = (evt) => {
-  if (document.activeElement !== commentInput && isEscEvent(evt) || document.activeElement !== hashtagsInput && isEscEvent(evt)) { // Когда что-то одно работает, через else if не работает
+  if ((document.activeElement === commentInput && isEscEvent(evt)) || (document.activeElement === hashtagsInput && isEscEvent(evt))) {
+    evt.preventDefault();
+  }
+  else if (isEscEvent(evt)) {
     closePictureElement();
   }
 };
@@ -50,7 +53,7 @@ const onHashtagInput = () => {
       else if ((hashtag.length === 1) && (hashtag === '#')){
         hashtagsInput.setCustomValidity('Хэштег не может состоять только из этого символа');
       }
-      else if (!HASHTAG_PATTERN.test(hashtag.slice(1))) {// не работает данный метод
+      else if (HASHTAG_PATTERN.test(hashtag.slice(1))) {// не работает данный метод
         hashtagsInput.setCustomValidity('В хэштеге не должно быть символов');
       }
 

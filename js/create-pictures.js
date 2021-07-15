@@ -1,3 +1,5 @@
+const pic = document.querySelector('.picture');
+
 const createPictures = (mock) => {
   const pictures = document.querySelector('.pictures');
   const pictureTemplate = document.querySelector('#picture');
@@ -13,4 +15,4 @@ const createPictures = (mock) => {
   });
   pictures.appendChild(fragment);
 };
-export {createPictures};
+export {createPictures, pic};
