@@ -5,6 +5,8 @@ import {createPictures} from './create-pictures.js';
 import {openPicture, renderBigPicture} from './fullscreen-picture.js';
 
 import {onChangeFileInput} from './upload-form.js';
+import './upload-filter.js';
+
 const MAX_POSTS = 25;
 const mock = createPosts(MAX_POSTS);
 createPictures(mock);
