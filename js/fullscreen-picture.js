@@ -3,7 +3,7 @@ import {isEscEvent} from './util.js';
 
 const SHOWED_COMMENTS_COUNT = 5;
 const fullscreenPicture = document.querySelector('.big-picture');
-const ClosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
+const сlosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
 const bigPicture = fullscreenPicture.querySelector('.big-picture__img img');
 const countLikes = fullscreenPicture.querySelector('.likes-count');
 const countComments = fullscreenPicture.querySelector('.comments-count');
@@ -69,18 +69,23 @@ const renderBigPicture = (photo) => {
   socialComments.innerHTML = '';
   const chunkComments = chunkRenderComments(photo.comments);
   socialComments.appendChild(renderComments(chunkComments[0]));
-
+  moreComments.dataset.index = 1;
+  moreComments.disabled = false;
+  countSocialComment.textContent = chunkComments[0].length;
   moreComments.addEventListener('click', (evt) => {
     const index = +evt.currentTarget.dataset.index;
     evt.currentTarget.dataset.index = index + 1;
     socialComments.appendChild(renderComments(chunkComments[index]));
-    if (renderComments(chunkComments[index+1])) {
+    const displayCount = Number(countSocialComment.textContent);
+    countSocialComment.textContent = displayCount + chunkComments[index].length;
+    if (!chunkComments[index + 1]) {
       evt.currentTarget.disabled = true;
+      moreComments.classList.add('visually-hidden');
     }
   });
-  countSocialComment.textContent = socialComments.length;
+
   document.addEventListener('keydown', onKeydownEsc);
-  ClosePictureButton.addEventListener('click', closePictureElement);
+  сlosePictureButton.addEventListener('click', closePictureElement);
 };
 
 export {openPicture, renderBigPicture};
