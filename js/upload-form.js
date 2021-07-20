@@ -1,5 +1,6 @@
 import {isEscEvent, MAX_COMMIT_LENGTH} from './util.js';
 
+const form = document.querySelector('.img-upload__form');
 const uploadFile = document.querySelector('#upload-file');
 const uploadForm = document.querySelector('.img-upload__overlay');
 const closeUploadForm = uploadForm.querySelector('.img-upload__cancel');
@@ -10,10 +11,13 @@ const minusButton = sizeFilter.querySelector('.scale__control--smaller');
 const plusButton = sizeFilter.querySelector('.scale__control--bigger');
 const uploadedPhoto = document.querySelector('.img-upload__preview');
 const sizeValue = sizeFilter.querySelector('.scale__control--value');
-let currentSize = 100;
+const DEFAULT_PREVIEW_SIZE = 100;
 const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁа-яё0-9]+/g;
 const MAX_HASHTAG_LENGHT = 20;
 const MAX_HASHTAG_QUANTITY = 5;
+const STEP_SIZE = 25;
+
+let currentSize = DEFAULT_PREVIEW_SIZE;
 
 const openPictureElement = () => {
   uploadForm.classList.remove('hidden');
@@ -77,28 +81,27 @@ const setImageSize = (size) => {
   currentSize = size;
 };
 
-const minusButtonClick = () => {
-  if (currentSize > 25) {
-    currentSize -= 25;
+const onMinusButtonClick = () => {
+  if (currentSize > STEP_SIZE) {
+    currentSize -= STEP_SIZE;
     setImageSize(currentSize);
   }
 };
 
-const plusButtonClick = () => {
-  if (currentSize <= 75) {
-    currentSize += 25;
+const onPlusButtonClick = () => {
+  if (currentSize < DEFAULT_PREVIEW_SIZE) {
+    currentSize += STEP_SIZE;
     setImageSize(currentSize);
   }
 };
-
 
 const uploadPhoto = () => {
   openPictureElement();
   commentInput.addEventListener('input', onCommentInput);
   hashtagsInput.addEventListener('input', onHashtagInput);
   document.addEventListener('keydown', onKeydownEsc);
-  minusButton.addEventListener('click', minusButtonClick);
-  plusButton.addEventListener('click', plusButtonClick);
+  minusButton.addEventListener('click', onMinusButtonClick);
+  plusButton.addEventListener('click', onPlusButtonClick);
   closeUploadForm.addEventListener('click', closePictureElement);
 };
 
