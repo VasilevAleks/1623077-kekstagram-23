@@ -5,13 +5,23 @@ const uploadForm = document.querySelector('.img-upload__overlay');
 const closeUploadForm = uploadForm.querySelector('.img-upload__cancel');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
 const commentInput = uploadForm.querySelector('.text__description');
-const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁа-яё0-9]+/g; //const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁаё-я0-9]+/g - почему то на это ругается
+const sizeFilter = document.querySelector('.img-upload__scale');
+const minusButton = sizeFilter.querySelector('.scale__control--smaller');
+const plusButton = sizeFilter.querySelector('.scale__control--bigger');
+const uploadedPhoto = document.querySelector('.img-upload__preview');
+const sizeValue = sizeFilter.querySelector('.scale__control--value');
+const DEFAULT_PREVIEW_SIZE = 100;
+const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁа-яё0-9]+/g;
 const MAX_HASHTAG_LENGHT = 20;
 const MAX_HASHTAG_QUANTITY = 5;
+const STEP_SIZE = 25;
+
+let currentSize = DEFAULT_PREVIEW_SIZE;
 
 const openPictureElement = () => {
   uploadForm.classList.remove('hidden');
   document.body.classList.add('modal-open');
+  sizeFilter.classList.remove('visually-hidden');
 };
 
 const closePictureElement = () => {
@@ -53,10 +63,9 @@ const onHashtagInput = () => {
       else if ((hashtag.length === 1) && (hashtag === '#')){
         hashtagsInput.setCustomValidity('Хэштег не может состоять только из этого символа');
       }
-      else if (HASHTAG_PATTERN.test(hashtag.slice(1))) {// не работает данный метод
+      else if (HASHTAG_PATTERN.test(hashtag.slice(1))) {
         hashtagsInput.setCustomValidity('В хэштеге не должно быть символов');
       }
-
       else {
         hashtagsInput.setCustomValidity('');
       }
@@ -65,11 +74,33 @@ const onHashtagInput = () => {
   hashtagsInput.reportValidity();
 };
 
+const setImageSize = (size) => {
+  sizeValue.value = `${size}%`;
+  uploadedPhoto.style = `transform: scale(${size / 100})`;
+  currentSize = size;
+};
+
+const onMinusButtonClick = () => {
+  if (currentSize > STEP_SIZE) {
+    currentSize -= STEP_SIZE;
+    setImageSize(currentSize);
+  }
+};
+
+const onPlusButtonClick = () => {
+  if (currentSize < DEFAULT_PREVIEW_SIZE) {
+    currentSize += STEP_SIZE;
+    setImageSize(currentSize);
+  }
+};
+
 const uploadPhoto = () => {
   openPictureElement();
   commentInput.addEventListener('input', onCommentInput);
   hashtagsInput.addEventListener('input', onHashtagInput);
   document.addEventListener('keydown', onKeydownEsc);
+  minusButton.addEventListener('click', onMinusButtonClick);
+  plusButton.addEventListener('click', onPlusButtonClick);
   closeUploadForm.addEventListener('click', closePictureElement);
 };
 
