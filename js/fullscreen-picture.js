@@ -2,6 +2,7 @@
 import {isEscEvent} from './util.js';
 
 const SHOWED_COMMENTS_COUNT = 5;
+export const pictures = document.querySelector('.pictures');
 const fullscreenPicture = document.querySelector('.big-picture');
 const сlosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
 const bigPicture = fullscreenPicture.querySelector('.big-picture__img img');
@@ -89,3 +90,4 @@ const renderBigPicture = (photo) => {
 };
 
 export {openPicture, renderBigPicture};
+
