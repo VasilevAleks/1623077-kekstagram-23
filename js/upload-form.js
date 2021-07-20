@@ -1,6 +1,5 @@
 import {isEscEvent, MAX_COMMIT_LENGTH} from './util.js';
 
-const form = document.querySelector('.img-upload__form');
 const uploadFile = document.querySelector('#upload-file');
 const uploadForm = document.querySelector('.img-upload__overlay');
 const closeUploadForm = uploadForm.querySelector('.img-upload__cancel');

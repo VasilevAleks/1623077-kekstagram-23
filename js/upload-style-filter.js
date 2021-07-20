@@ -69,7 +69,7 @@ const showEffect = (style) => {
   const effectStyle = style.name;
   const effectUnit = style.unit;
   uploadedPhoto.classList.add(effectClass);
-  sliderElement.noUiSlider.on('update', (_, handle, unencoded) => {
+  sliderElement.noUiSlider.on('update', (__, handle, unencoded) => {
     valueElement.value = unencoded[handle];
     uploadedPhoto.style.filter = `${effectStyle}(${valueElement.value}${effectUnit})`;
   });
