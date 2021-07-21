@@ -16,6 +16,7 @@ const socialComment = socialComments.querySelector('.social__comment');
 const openPicture = () => {
   fullscreenPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
+
 };
 
 const closePictureElement = () => {
@@ -25,7 +26,7 @@ const closePictureElement = () => {
 
 const onKeydownEsc = (evt) => {
   if (isEscEvent(evt)) {
-    onClosePicture ();
+    closePictureElement ();
   }
 };
 
@@ -71,6 +72,7 @@ const renderBigPicture = (photo) => {
   socialComments.appendChild(renderComments(chunkComments[0]));
   moreComments.dataset.index = 1;
   moreComments.disabled = false;
+  moreComments.classList.remove('visually-hidden');
   countSocialComment.textContent = chunkComments[0].length;
   moreComments.addEventListener('click', (evt) => {
     const index = +evt.currentTarget.dataset.index;
@@ -83,7 +85,7 @@ const renderBigPicture = (photo) => {
       moreComments.classList.add('visually-hidden');
     }
   });
-  document.addEventListener('keydown', onKeydownEsc);
+  document.body.addEventListener('keydown', onKeydownEsc);
   сlosePictureButton.addEventListener('click', closePictureElement);
 };
 

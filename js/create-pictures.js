@@ -13,7 +13,10 @@ const createPictures = (mock) => {
     element.querySelector('.picture__likes').textContent = mock[index].likes;
     element.querySelector('.picture__comments').textContent = mock[index].comments.length;
     fragment.appendChild(element);
-    element.addEventListener('click', renderBigPicture[index]);
+    element.addEventListener('click', (evt) =>{
+      evt.preventDefault();
+      renderBigPicture(mock[index]);
+    });
   });
   pictures.appendChild(fragment);
 };
