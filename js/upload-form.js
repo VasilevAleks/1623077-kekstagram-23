@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import {isEscEvent, MAX_COMMIT_LENGTH} from './util.js';
 import {sendData} from './api.js';
 
@@ -120,6 +119,7 @@ const renderTemplate = (informing,informingButton) => {
 };
 
 const setUserFormSubmit = () => {
+  uploadFile.addEventListener('change',uploadPhoto);
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
@@ -131,9 +131,4 @@ const setUserFormSubmit = () => {
   });
 };
 
-const onChangeFileInput = () => {
-  uploadFile.addEventListener('change',uploadPhoto);
-
-};
-
-export {setUserFormSubmit, onChangeFileInput};
+export {setUserFormSubmit};

@@ -1,20 +1,19 @@
 import {createPictures} from './create-pictures.js';
+import {showAlert} from './util.js';
+let dataArray = [];
 
-import {openPicture, renderBigPicture} from './fullscreen-picture.js';
-
-const getData = () => {
+const getData = (onSuccess) => {
   fetch('https://23.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
-    .then((mock) => {
-      createPictures(mock);
-      //openPicture();
-      renderBigPicture(mock[11]);
-    })
-    .catch(() => {
-      onFail();
-    });
+    .then((data) => onSuccess(data))
+    .catch((error) => showAlert(error));
 };
 
+const onSuccessGetData = (response) => {
+  dataArray = [...response];
+  createPictures(dataArray);
+};
+getData(onSuccessGetData);
 const sendData = (onSuccess, onFail, body) => {
   fetch(
     'https://23.javascript.pages.academy/kekstagram',
@@ -30,9 +29,7 @@ const sendData = (onSuccess, onFail, body) => {
         onFail();
       }
     })
-    .catch(() => {
-      onFail();
-    });
+    .catch((error) => onFail(error));
 };
 
 

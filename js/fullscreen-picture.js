@@ -2,7 +2,6 @@
 import {isEscEvent} from './util.js';
 
 const SHOWED_COMMENTS_COUNT = 5;
-export const pictures = document.querySelector('.pictures');
 const fullscreenPicture = document.querySelector('.big-picture');
 const сlosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
 const bigPicture = fullscreenPicture.querySelector('.big-picture__img img');
@@ -17,7 +16,6 @@ const socialComment = socialComments.querySelector('.social__comment');
 const openPicture = () => {
   fullscreenPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-
 };
 
 const closePictureElement = () => {
@@ -62,6 +60,7 @@ const chunkRenderComments = (comments) => {
 };
 
 const renderBigPicture = (photo) => {
+  openPicture();
   bigPicture.src = photo.url;
   bigPicture.alt = photo.description;
   countLikes.textContent = photo.likes;
@@ -84,10 +83,9 @@ const renderBigPicture = (photo) => {
       moreComments.classList.add('visually-hidden');
     }
   });
-
   document.addEventListener('keydown', onKeydownEsc);
   сlosePictureButton.addEventListener('click', closePictureElement);
 };
 
-export {openPicture, renderBigPicture};
+export {renderBigPicture};
 
