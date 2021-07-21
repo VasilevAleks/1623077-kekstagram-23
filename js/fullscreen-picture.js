@@ -2,7 +2,6 @@
 import {isEscEvent} from './util.js';
 
 const SHOWED_COMMENTS_COUNT = 5;
-export const pictures = document.querySelector('.pictures');
 const fullscreenPicture = document.querySelector('.big-picture');
 const сlosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
 const bigPicture = fullscreenPicture.querySelector('.big-picture__img img');
@@ -27,7 +26,7 @@ const closePictureElement = () => {
 
 const onKeydownEsc = (evt) => {
   if (isEscEvent(evt)) {
-    onClosePicture ();
+    closePictureElement ();
   }
 };
 
@@ -62,6 +61,7 @@ const chunkRenderComments = (comments) => {
 };
 
 const renderBigPicture = (photo) => {
+  openPicture();
   bigPicture.src = photo.url;
   bigPicture.alt = photo.description;
   countLikes.textContent = photo.likes;
@@ -72,6 +72,7 @@ const renderBigPicture = (photo) => {
   socialComments.appendChild(renderComments(chunkComments[0]));
   moreComments.dataset.index = 1;
   moreComments.disabled = false;
+  moreComments.classList.remove('visually-hidden');
   countSocialComment.textContent = chunkComments[0].length;
   moreComments.addEventListener('click', (evt) => {
     const index = +evt.currentTarget.dataset.index;
@@ -84,10 +85,9 @@ const renderBigPicture = (photo) => {
       moreComments.classList.add('visually-hidden');
     }
   });
-
-  document.addEventListener('keydown', onKeydownEsc);
+  document.body.addEventListener('keydown', onKeydownEsc);
   сlosePictureButton.addEventListener('click', closePictureElement);
 };
 
-export {openPicture, renderBigPicture};
+export {renderBigPicture};
 

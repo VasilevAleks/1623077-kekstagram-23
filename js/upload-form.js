@@ -1,5 +1,7 @@
 import {isEscEvent, MAX_COMMIT_LENGTH} from './util.js';
+import {sendData} from './api.js';
 
+const form = document.querySelector('.img-upload__form');
 const uploadFile = document.querySelector('#upload-file');
 const uploadForm = document.querySelector('.img-upload__overlay');
 const closeUploadForm = uploadForm.querySelector('.img-upload__cancel');
@@ -10,6 +12,10 @@ const minusButton = sizeFilter.querySelector('.scale__control--smaller');
 const plusButton = sizeFilter.querySelector('.scale__control--bigger');
 const uploadedPhoto = document.querySelector('.img-upload__preview');
 const sizeValue = sizeFilter.querySelector('.scale__control--value');
+const success = document.querySelector('#success').content.querySelector('.success');
+const successButton = success.querySelector('.success__button');
+const error = document.querySelector('#error').content.querySelector('.error');
+const errorButton = success.querySelector('.error__button');
 const DEFAULT_PREVIEW_SIZE = 100;
 const HASHTAG_PATTERN = /[^A-Za-zА-ЯЁа-яё0-9]+/g;
 const MAX_HASHTAG_LENGHT = 20;
@@ -104,6 +110,25 @@ const uploadPhoto = () => {
   closeUploadForm.addEventListener('click', closePictureElement);
 };
 
-export const onChangeFileInput = () => {
-  uploadFile.addEventListener('change',uploadPhoto);
+const renderTemplate = (informing,informingButton) => {
+  document.body.append(informing);
+  closePictureElement();
+  informingButton.addEventListener('click', () => {
+    document.body.lastChild.remove(informing);
+  });
 };
+
+const setUserFormSubmit = () => {
+  uploadFile.addEventListener('change',uploadPhoto);
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => renderTemplate(success, successButton),
+      () => renderTemplate(error, errorButton),
+      new FormData(evt.target),
+    );
+  });
+};
+
+export {setUserFormSubmit};
