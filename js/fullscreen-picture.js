@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+
 import {isEscEvent} from './util.js';
 
 const SHOWED_COMMENTS_COUNT = 5;
@@ -44,7 +44,7 @@ const renderComments = (comments) => {
   return fragment;
 };
 
-const chunkRenderComments = (comments) => {
+const renderChunckOfComments= (comments) => {
   const arrayComments = [];
   let partOfArrayComments = [];
   for ( let index = 0; index < comments.length; index++) {
@@ -68,21 +68,21 @@ const renderBigPicture = (photo) => {
   countComments.textContent = photo.comments.length;
   socialCaption.textContent = photo.description;
   socialComments.innerHTML = '';
-  const chunkComments = chunkRenderComments(photo.comments);
+  const chunkComments = renderChunckOfComments(photo.comments);
   socialComments.appendChild(renderComments(chunkComments[0]));
   moreComments.dataset.index = 1;
   moreComments.disabled = false;
-  moreComments.classList.remove('visually-hidden');
+  moreComments.classList.remove('hidden');
   countSocialComment.textContent = chunkComments[0].length;
   moreComments.addEventListener('click', (evt) => {
     const index = +evt.currentTarget.dataset.index;
     evt.currentTarget.dataset.index = index + 1;
     socialComments.appendChild(renderComments(chunkComments[index]));
-    const displayCount = Number(countSocialComment.textContent);
+    const displayCount = +(countSocialComment.textContent);
     countSocialComment.textContent = displayCount + chunkComments[index].length;
     if (!chunkComments[index + 1]) {
       evt.currentTarget.disabled = true;
-      moreComments.classList.add('visually-hidden');
+      moreComments.classList.add('hidden');
     }
   });
   document.body.addEventListener('keydown', onKeydownEsc);
