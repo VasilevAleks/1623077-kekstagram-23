@@ -1,7 +1,7 @@
 
 import {isEscEvent} from './util.js';
 
-const SHOWED_COMMENTS_COUNT = 5;
+
 const fullscreenPicture = document.querySelector('.big-picture');
 const сlosePictureButton = fullscreenPicture.querySelector('#picture-cancel');
 const bigPicture = fullscreenPicture.querySelector('.big-picture__img img');
@@ -12,6 +12,8 @@ const countSocialComment = fullscreenPicture.querySelector('.comments-display');
 const moreComments = fullscreenPicture.querySelector('.comments-loader');
 const socialComments= fullscreenPicture.querySelector('.social__comments');
 const socialComment = socialComments.querySelector('.social__comment');
+const SHOWED_COMMENTS_COUNT = 5;
+const MIN_CHUNK_COUNT = 1;
 
 const openPicture = () => {
   fullscreenPicture.classList.remove('hidden');
@@ -30,7 +32,7 @@ const onKeydownEsc = (evt) => {
   }
 };
 
-const renderComments = (comments) => {
+const renderComments = (comments = []) => {
   const fragment = document.createDocumentFragment();
   comments.forEach((data) => {
     const comment = socialComment.cloneNode(true);
@@ -44,7 +46,7 @@ const renderComments = (comments) => {
   return fragment;
 };
 
-const renderChunckOfComments= (comments) => {
+const renderChunckOfComments = (comments) => {
   const arrayComments = [];
   let partOfArrayComments = [];
   for ( let index = 0; index < comments.length; index++) {
@@ -60,8 +62,31 @@ const renderChunckOfComments= (comments) => {
   return arrayComments;
 };
 
+const setStartStateMoreComments = () => {
+  moreComments.dataset.index = 1;
+  moreComments.classList.remove('hidden');
+};
+
+const hiddenMoreComments = () => {
+  moreComments.classList.add('hidden');
+};
+
+const onClickMoreComments = (evt, chunkArray) => {
+  const index = +evt.currentTarget.dataset.index;
+
+  if (chunkArray[index]) {
+    socialComments.appendChild(renderComments(chunkArray[index]));
+    const displayCount = +(countSocialComment.textContent);
+    countSocialComment.textContent = displayCount + chunkArray[index].length;
+  }
+  if (chunkArray[index + 1]) {
+    evt.currentTarget.dataset.index = index + 1;
+  } else {
+    hiddenMoreComments();
+  }
+};
+
 const renderBigPicture = (photo) => {
-  openPicture();
   bigPicture.src = photo.url;
   bigPicture.alt = photo.description;
   countLikes.textContent = photo.likes;
@@ -70,24 +95,17 @@ const renderBigPicture = (photo) => {
   socialComments.innerHTML = '';
   const chunkComments = renderChunckOfComments(photo.comments);
   socialComments.appendChild(renderComments(chunkComments[0]));
-  moreComments.dataset.index = 1;
-  moreComments.disabled = false;
-  moreComments.classList.remove('hidden');
   countSocialComment.textContent = chunkComments[0].length;
-  moreComments.addEventListener('click', (evt) => {
-    const index = +evt.currentTarget.dataset.index;
-    evt.currentTarget.dataset.index = index + 1;
-    socialComments.appendChild(renderComments(chunkComments[index]));
-    const displayCount = +(countSocialComment.textContent);
-    countSocialComment.textContent = displayCount + chunkComments[index].length;
-    if (!chunkComments[index + 1]) {
-      evt.currentTarget.disabled = true;
-      moreComments.classList.add('hidden');
-    }
-  });
+
+  if (chunkComments.length >= MIN_CHUNK_COUNT) {
+    setStartStateMoreComments();
+    moreComments.addEventListener('click', (evt) => onClickMoreComments(evt, chunkComments));
+  } else {
+    hiddenMoreComments();
+  }
   document.body.addEventListener('keydown', onKeydownEsc);
   сlosePictureButton.addEventListener('click', closePictureElement);
 };
 
-export {renderBigPicture};
+export {openPicture, renderBigPicture};
 

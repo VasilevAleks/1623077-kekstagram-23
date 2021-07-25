@@ -25,8 +25,9 @@ const clearPhotos = () => {
 const renderDebounce = debounce(createPictures, DELAY);
 
 const setFilterButtonsStyle = (array) => {
+  const temporaryArray = Array.from(array);
   filterButtons.forEach((button) => {
-    button.addEventListener('click', (evt) => {
+    button.addEventListener('click', (evt)  => {
       filterButtons.forEach((element) => element.classList.remove('img-filters__button--active'));
       button.classList.add('img-filters__button--active');
       const target = evt.target;
@@ -35,10 +36,10 @@ const setFilterButtonsStyle = (array) => {
         renderDebounce(array);
       } else if (target === discussedButton) {
         clearPhotos();
-        renderDebounce(onDiscussPhotos(array));
+        renderDebounce(onDiscussPhotos(temporaryArray));
       } else if (target === randomButton) {
         clearPhotos();
-        renderDebounce(onRandomPhotos(array));
+        renderDebounce(onRandomPhotos(temporaryArray));
       }
     });
   });
