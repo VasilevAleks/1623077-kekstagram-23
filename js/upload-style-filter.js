@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+
 const sliderObject = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const valueElement = document.querySelector('.effect-level__value');
@@ -75,7 +75,7 @@ const showEffect = (style) => {
   });
 };
 
-const parametsSlider = (style) =>{
+const getParametsSlider = (style) =>{
   const startRangeSlider = style.minEffect;
   const endRangeSlider = style.maxEffect;
   const startSlider = style.maxEffect;
@@ -90,12 +90,12 @@ const parametsSlider = (style) =>{
   });
 };
 
-const styleEffects = (evt) => {
+const showStyleEffects = (evt) => {
   const effect = evt.currentTarget;
   if (effect.checked) {
     sliderObject.classList.remove('visually-hidden');
     showEffect(effects[effect.value]);
-    parametsSlider(effects[effect.value]);
+    getParametsSlider(effects[effect.value]);
   }
 };
 
@@ -103,8 +103,8 @@ none.addEventListener('click', () => {
   sliderObject.classList.add('visually-hidden');
   uploadedPhoto.style.filter = 'none';
 });
-chrome.addEventListener('click', styleEffects);
-sepia.addEventListener('click', styleEffects);
-marvin.addEventListener('click', styleEffects);
-phobos.addEventListener('click', styleEffects);
-heat.addEventListener('click', styleEffects);
+chrome.addEventListener('click', showStyleEffects);
+sepia.addEventListener('click', showStyleEffects);
+marvin.addEventListener('click', showStyleEffects);
+phobos.addEventListener('click', showStyleEffects);
+heat.addEventListener('click', showStyleEffects);

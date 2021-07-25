@@ -1,9 +1,10 @@
 
 import {showAlert} from './util.js';
-
+const GET_LINK = 'https://23.javascript.pages.academy/kekstagram/data';
+const SEND_LINK = 'https://23.javascript.pages.academy/kekstagram';
 
 const getData = (onSuccess) => {
-  fetch('https://23.javascript.pages.academy/kekstagram/data')
+  fetch(GET_LINK)
     .then((response) => response.json())
     .then((data) => onSuccess(data))
     .catch((error) => showAlert(error));
@@ -12,7 +13,7 @@ const getData = (onSuccess) => {
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://23.javascript.pages.academy/kekstagram',
+    SEND_LINK,
     {
       method: 'POST',
       body,

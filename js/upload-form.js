@@ -56,6 +56,7 @@ const onCommentInput = () => {
 
 const onHashtagInput = () => {
   const arrayOfHashtags = hashtagsInput.value.replace(/ +/g, ' ').toLowerCase().trim().split(' ');
+  const unique = [...new Set(arrayOfHashtags)];
   arrayOfHashtags.forEach((hashtag) => {
     if (arrayOfHashtags.length === 0 || arrayOfHashtags[0] === '') {
       hashtagsInput.setCustomValidity('');
@@ -71,8 +72,9 @@ const onHashtagInput = () => {
       }
       else if (HASHTAG_PATTERN.test(hashtag.slice(1))) {
         hashtagsInput.setCustomValidity('В хэштеге не должно быть символов');
-      }
-      else {
+      } else if(arrayOfHashtags.length !== unique.length) {
+        hashtagsInput.setCustomValidity('Удалите одинаковые хештеги');
+      } else {
         hashtagsInput.setCustomValidity('');
       }
     }
@@ -113,6 +115,10 @@ const uploadPhoto = () => {
 const renderTemplate = (informing,informingButton) => {
   document.body.append(informing);
   closePictureElement();
+  document.body.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      document.body.lastChild.remove(informing);}
+  });
   informingButton.addEventListener('click', () => {
     document.body.lastChild.remove(informing);
   });

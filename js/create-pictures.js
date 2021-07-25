@@ -1,4 +1,4 @@
-import {renderBigPicture} from './fullscreen-picture.js';
+import {openPicture ,renderBigPicture} from './fullscreen-picture.js';
 
 const createPictures = (mock) => {
   const pictures = document.querySelector('.pictures');
@@ -13,8 +13,9 @@ const createPictures = (mock) => {
     element.querySelector('.picture__likes').textContent = mock[index].likes;
     element.querySelector('.picture__comments').textContent = mock[index].comments.length;
     fragment.appendChild(element);
-    element.addEventListener('click', (evt) =>{
+    element.addEventListener('click', (evt) => {
       evt.preventDefault();
+      openPicture();
       renderBigPicture(mock[index]);
     });
   });

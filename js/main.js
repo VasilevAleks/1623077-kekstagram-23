@@ -1,14 +1,14 @@
 import {getData} from './api.js';
 import {setUserFormSubmit} from './upload-form.js';
 import './upload-style-filter.js';
-import {createPictures} from './create-pictures.js';
+import {getPhotos} from './foto-filter.js';
 
-let data= [];
+let data = [];
 
 const onSuccessGetData = (response) => {
   data = [...response];
-  createPictures(data);
+  getPhotos(data);
 };
-
-getData(onSuccessGetData);
 setUserFormSubmit();
+getData(onSuccessGetData);
+
