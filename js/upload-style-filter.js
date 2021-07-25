@@ -90,7 +90,7 @@ const getParametsSlider = (style) =>{
   });
 };
 
-const showStyleEffects = (evt) => {
+const onShowStyleEffects = (evt) => {
   const effect = evt.currentTarget;
   if (effect.checked) {
     sliderObject.classList.remove('visually-hidden');
@@ -103,8 +103,8 @@ none.addEventListener('click', () => {
   sliderObject.classList.add('visually-hidden');
   uploadedPhoto.style.filter = 'none';
 });
-chrome.addEventListener('click', showStyleEffects);
-sepia.addEventListener('click', showStyleEffects);
-marvin.addEventListener('click', showStyleEffects);
-phobos.addEventListener('click', showStyleEffects);
-heat.addEventListener('click', showStyleEffects);
+chrome.addEventListener('click', onShowStyleEffects);
+sepia.addEventListener('click', onShowStyleEffects);
+marvin.addEventListener('click', onShowStyleEffects);
+phobos.addEventListener('click', onShowStyleEffects);
+heat.addEventListener('click', onShowStyleEffects);

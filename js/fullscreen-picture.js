@@ -15,22 +15,13 @@ const socialComment = socialComments.querySelector('.social__comment');
 const SHOWED_COMMENTS_COUNT = 5;
 const MIN_CHUNK_COUNT = 1;
 
+let chunkComments = [];
+
 const openPicture = () => {
   fullscreenPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-
 };
 
-const closePictureElement = () => {
-  fullscreenPicture.classList.add('hidden');
-  document.body.classList.remove('modal-open');
-};
-
-const onKeydownEsc = (evt) => {
-  if (isEscEvent(evt)) {
-    closePictureElement ();
-  }
-};
 
 const renderComments = (comments = []) => {
   const fragment = document.createDocumentFragment();
@@ -71,18 +62,31 @@ const hiddenMoreComments = () => {
   moreComments.classList.add('hidden');
 };
 
-const onClickMoreComments = (evt, chunkArray) => {
+const onClickMoreComments = (evt) => {
   const index = +evt.currentTarget.dataset.index;
 
-  if (chunkArray[index]) {
-    socialComments.appendChild(renderComments(chunkArray[index]));
+  if (chunkComments[index]) {
+    socialComments.appendChild(renderComments(chunkComments[index]));
     const displayCount = +(countSocialComment.textContent);
-    countSocialComment.textContent = displayCount + chunkArray[index].length;
+    countSocialComment.textContent = displayCount + chunkComments[index].length;
   }
-  if (chunkArray[index + 1]) {
+  if (chunkComments[index + 1]) {
     evt.currentTarget.dataset.index = index + 1;
   } else {
     hiddenMoreComments();
+  }
+};
+
+const closePictureElement = () => {
+  fullscreenPicture.classList.add('hidden');
+  document.body.classList.remove('modal-open');
+  setStartStateMoreComments();
+  moreComments.addEventListener('click', onClickMoreComments);
+};
+
+const onKeydownEsc = (evt) => {
+  if (isEscEvent(evt)) {
+    closePictureElement ();
   }
 };
 
@@ -93,13 +97,12 @@ const renderBigPicture = (photo) => {
   countComments.textContent = photo.comments.length;
   socialCaption.textContent = photo.description;
   socialComments.innerHTML = '';
-  const chunkComments = renderChunckOfComments(photo.comments);
+  chunkComments = renderChunckOfComments(photo.comments);
   socialComments.appendChild(renderComments(chunkComments[0]));
   countSocialComment.textContent = chunkComments[0].length;
 
-  if (chunkComments.length >= MIN_CHUNK_COUNT) {
-    setStartStateMoreComments();
-    moreComments.addEventListener('click', (evt) => onClickMoreComments(evt, chunkComments));
+  if (chunkComments.length > MIN_CHUNK_COUNT) {
+    moreComments.addEventListener('click', onClickMoreComments);
   } else {
     hiddenMoreComments();
   }
